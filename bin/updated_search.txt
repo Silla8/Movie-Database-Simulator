@@ -1,0 +1,171 @@
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.util.List;
+import java.util.Scanner;
+
+class MoviesDataset {
+    private String date;
+    private int day, month, year;
+    private String title;
+    private String overview;
+    private String popularity;
+    private String count;
+    private String average;
+    private String language;
+    private String genre;
+    private String url;
+
+    public MoviesDataset(String date, String title, String overview, String popularity, String count, String average,String language, String genre, String url) {
+        this.date = date;
+        String array[] = date.split("/");
+        this.day = Integer.valueOf(array[1]);
+        this.month = Integer.valueOf(array[0]);
+        this.year = Integer.valueOf(array[2]);
+        this.title = title;
+        this.overview = overview;
+        this.popularity = popularity;
+        this.count = count;
+        this.average = average;
+        this.language = language;
+        this.genre = genre;
+        this.url = url;
+    }
+
+    public String getDate() {
+        return date;
+    }
+    public int getDay() {
+        return day;
+    }
+    public int getMonth() {
+        return month;
+    }
+    public int getYear() {
+        return year;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public String getOverview() {
+        return overview;
+    }
+    public String getPopularity() {
+        return popularity;
+    }
+    public String getCount() {
+        return count;
+    }
+    public String getAverage() {
+        return average;
+    }
+
+    public String getOriginal_Language() {
+        return language;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+    public String getUrl() {
+        return url;
+    }
+    public String toString() {
+        return "Date: " + this.date + ", Title: " + this.title + ", Overview: " + this.overview + ", Popularity: " + this.popularity + ", Count: " + this.count + ", Average: " + this.average + ", Language: " + this.language + ", Genre: " + this.genre + ", Url: " + this.url;
+    }
+}
+
+public class Movie {
+    public static void main(String args[]) {
+//        search();
+    }
+
+    public static ArrayList<MoviesDataset> search(List<MoviesDataset> dataset) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("FOR STRING FIELDS -> (Ex: title Cat People)");
+        System.out.println("FOR NON-STRING FIELDS -> (Ex: avarage: 5.9)");
+        System.out.println("FOR STRING FIELDS -> (Ex: title Cat People)");
+        ArrayList<MoviesDataset> entity = new ArrayList<>();
+        String data = scan.nextLine();
+
+        if(data.contains("title") || data.toLowerCase().contains("overview") || data.toLowerCase().contains("language") || data.toLowerCase().contains("url")) {
+            for(int s = 0; s < dataset.size(); s++) {
+                if(dataset.get(s).toString().contains(data)) { entity.add(dataset.get(s)); }
+            }
+            if(entity.size() != 0) {
+                try(FileWriter fWriter = new FileWriter(new File("entity.csv"));) {
+                    int k;
+                    for(k=0; k<entity.size(); k++) {
+                        fWriter.write(entity.get(k).toString() + '\n');
+                    }
+                } catch (Exception a) {
+                    System.out.println("Error!");
+                }
+            } else {
+                System.out.println("Incorrect!");
+            }
+
+        }
+
+        else if(data.equals("date") || data.equals("popularity") || data.equals("count") || data.equals("average"))
+        {
+            for(int m=0; m < dataset.size(); m++) {
+                if(data.contains("popularity") && dataset.get(m).getPopularity().equals(data)) {
+                    entity.add(dataset.get(m));
+                }
+                if(data.contains("count") && dataset.get(m).getCount().equals(data)) {
+                    entity.add(dataset.get(m));
+                }
+                if(data.contains("average") && dataset.get(m).getAverage().equals(data)) {
+                    entity.add(dataset.get(m));
+                }
+                if(data.contains("date") && dataset.get(m).getDate().equals(data)) {
+                    entity.add(dataset.get(m));
+                }
+            }
+
+            if(0 != entity.size()) {
+                System.out.println("Do you want to sove in 'fields.csv'? --- yes --- no ---");
+                System.out.print("Options: --- yes --- no --- YES --- NO --- Yes --- No");
+                String reply = scan.nextLine();
+                if(reply.equals("YES") || reply.equals("Yes") || reply.contentEquals("yes")) {
+                    try(FileWriter fwriter = new FileWriter(new File("fields.csv")); BufferedWriter bwriter = new BufferedWriter(fwriter)) {
+                        for(int i=0; i<entity.size(); i++) {
+                            bwriter.write(entity.get(i).toString());
+                        }
+                    } catch(Exception a) {
+                        System.out.println("Error!!!");
+                    }
+                }
+            }
+        }
+
+        else if(data.contains("genre")) {
+            System.out.println("\n---------------------------------------------------------------------------------------------------------- GENRE -----------------------------------------------------------------------------------------------------------------------");
+            System.out.print("    --- Music ---Drama --- History --- Science Fiction --- War --- Mystery --- Thriller --- Horror --- Crime --- Fantasy --- Family --- Adventure --- Romance --- Animation --- Comedy --- TV Movie --- Documentary --- Action ---\n\n\n");
+            for(int s=0; s < dataset.size(); s++) {
+                if(dataset.get(s).getGenre().equals("Action") || dataset.get(s).getGenre().equals("Music") || dataset.get(s).getGenre().equals("Drama") || dataset.get(s).getGenre().equals("History") || dataset.get(s).getGenre().equals("Thriller") || dataset.get(s).getGenre().equals("Horror") || dataset.get(s).getGenre().equals("Crime") || dataset.get(s).getGenre().equals("Fantasy") || dataset.get(s).getGenre().equals("Family") || dataset.get(s).getGenre().equals("Adventure") || dataset.get(s).getGenre().equals("Romance") || dataset.get(s).getGenre().equals("Animation") || dataset.get(s).getGenre().equals("Science Fiction") || dataset.get(s).getGenre().equals("War") || dataset.get(s).getGenre().equals("Mystery") || dataset.get(s).getGenre().equals("Comedy") || dataset.get(s).getGenre().equals("TV Movie") || dataset.get(s).getGenre().equals("Documentary")) {
+                    entity.add(dataset.get(s));
+                }
+                System.out.println("Do you want to sove in 'fields.csv'? --- yes --- no ---");
+                System.out.print("Options: --- yes --- no --- YES --- NO --- Yes --- No");
+                String reply = scan.nextLine();
+                if(reply.equals("YES") || reply.equals("Yes") || reply.contentEquals("yes")) {
+                    try(FileWriter fwriter = new FileWriter(new File("fields.csv")); BufferedWriter bwriter = new BufferedWriter(fwriter)) {
+                        for(int k=0; k<entity.size(); k++) {
+                            bwriter.write(entity.get(k).toString());
+                        }
+                        System.out.println("Good job!");
+                    } catch(Exception a) {
+                        System.out.println("Error!!!");
+                    }
+                }
+            }
+
+        } else {
+            System.out.println("Incorrect");
+        }
+        return entity;
+    }
+}
